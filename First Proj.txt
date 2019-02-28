@@ -1,0 +1,53 @@
+def cipherEncrypt(string, shift):
+    cipher = ''
+    for char in string: #Cycles entire string
+        if char == ' ': #Checks for spaces
+            cipher = cipher + char
+        else: #Deals with every other instance
+            cipher = cipher + chr((ord(char) + shift - 97) % 26 + 97)
+    shift = str(shift)
+
+    return cipher + shift #Returns string with the shift
+
+
+def cipherDecrypt(word):
+    key = int(word[len(word) - 1]) #sets the key
+    word = word[:-1] #subtracts the string off
+    if any(char.isdigit() for char in word): #checks for double digit string
+        keyTwo = (word[len(word) - 1])
+        key = str(key)
+        key = int(keyTwo + key) #combines the key
+        word = word[:-1]
+    decryptString = ""
+    for i in word: #goes through every character in string
+        charvalue = ord(i) - key
+
+        if charvalue < 97 and charvalue != ord(" ") - key:
+            charvalue = ord("z") - (96 - charvalue)
+            decryptString += chr(charvalue)
+        elif charvalue == ord(" ") - key: #checks for spaces
+            decryptString += " "
+        else:
+            decryptString += chr(charvalue)
+
+    return decryptString
+
+
+def main():
+    decision = ""
+    while decision != "stop": #Keeps loop running while encoding/decoding
+        decision = input("Would you like to 'encode' or 'decode' or 'stop': ")
+        if decision == "encode":
+            text = input("Enter a string to encode: ")
+            num = int(input("Enter your number to shift: "))
+            text = text.lower()
+            print("Original input: ", text)
+            print("After encryption: ", cipherEncrypt(text, num))
+        elif decision == "decode":
+            text = input("Enter a string to decode: ")
+            text = text.lower()
+            print("Original input: ", text)
+            print("After encryption: ", cipherDecrypt(text))
+
+
+main()
